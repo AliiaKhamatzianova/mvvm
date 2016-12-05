@@ -1,4 +1,8 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using SampleMVVM.Models;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace SampleMVVM.Views
 {
@@ -11,5 +15,6 @@ namespace SampleMVVM.Views
         {
             InitializeComponent();
         }
+
     }
 }

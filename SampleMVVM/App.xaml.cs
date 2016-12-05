@@ -3,6 +3,8 @@ using System.Windows;
 using SampleMVVM.Models;
 using SampleMVVM.ViewModels;
 using SampleMVVM.Views;
+using System.Linq;
+using System.Data.Entity;
 
 namespace SampleMVVM
 {
@@ -14,15 +16,17 @@ namespace SampleMVVM
         private void OnStartup(object sender, StartupEventArgs e)
         {
 
-            List<Task> books = new List<Task>()
-            {
-                new Task("Cделай это", null, 3),
-                new Task("Сделай то", "Какое-то описание", 2),
-                new Task("И про это не забудь", "Еще какое-то описание", 1)
-            };
+            DataBaseContext ctx = new DataBaseContext();
+            ctx.Tasks.Load();
+            var data = (from Tasks in ctx.Tasks
+                       //where Tasks.Status == Statuses.TODO
+                       select Tasks).ToList();
 
+
+            //select t;
             MainView view = new MainView(); // создали View
-            MainViewModel viewModel = new MainViewModel(books); // Создали ViewModel
+            MainViewModel viewModel = new MainViewModel(data, ctx);
+            //MainViewModel viewModel = new MainViewModel(ctx.Tasks.ToList(), ctx); // Создали ViewModel
 
             view.DataContext = viewModel; // положили ViewModel во View в качестве DataContext
             view.Show();

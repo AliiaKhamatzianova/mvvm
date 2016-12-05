@@ -1,6 +1,10 @@
 ﻿using SampleMVVM.Models;
 using SampleMVVM.Commands;
 using System.Windows.Input;
+using System;
+using GongSolutions.Wpf.DragDrop;
+using System.Windows;
+using System.Collections.Generic;
 
 namespace SampleMVVM.ViewModels
 {
@@ -8,9 +12,17 @@ namespace SampleMVVM.ViewModels
     {
         public Task Task;
 
-        public TaskViewModel(Task task)
+        protected DataBaseContext DBContext;
+
+        public TaskViewModel()
+        {
+
+        }
+
+        public TaskViewModel(Task task, DataBaseContext dbContext)
         {
             Task = task;
+            DBContext = dbContext;
         }
 
         public string Name
@@ -20,6 +32,7 @@ namespace SampleMVVM.ViewModels
             {
                 Task.Name = value;
                 OnPropertyChanged("Name");
+                DBContext.SaveChanges();
             }
         }
 
@@ -30,22 +43,61 @@ namespace SampleMVVM.ViewModels
             {
                 Task.Description = value;
                 OnPropertyChanged("Description");
+                DBContext.SaveChanges();
             }
         }
 
-        public int Priority
+        public Priorities Priority
         {
             get { return Task.Priority; }
             set
             {
                 Task.Priority = value;
-                OnPropertyChanged("Priority");
+
+                if (value >= Priorities.Low && value <= Priorities.High)
+                {
+                    OnPropertyChanged("Priority");
+                    DBContext.SaveChanges();
+                }
+            }
+        }
+
+        public Statuses Status
+        {
+            get { return Task.Status; }
+            set
+            {
+                Task.Status = value;
+                OnPropertyChanged("Status");
+                DBContext.SaveChanges();
+            }
+        }
+
+        public DateTime StartDate
+        {
+            get { return Task.StartDate; }
+            set
+            {
+                Task.StartDate = value;
+                OnPropertyChanged("StartDate");
+                DBContext.SaveChanges();
+            }
+        }
+
+        public DateTime? EndDate
+        {
+            get { return Task.EndDate; }
+            set
+            {
+                Task.EndDate = value;
+                OnPropertyChanged("EndDate");
+                DBContext.SaveChanges();
             }
         }
 
         #region Commands
 
-        #region Забрать
+        #region Увеличить
 
         private DelegateCommand _increasePriorityCommand;
 
@@ -58,11 +110,12 @@ namespace SampleMVVM.ViewModels
 
         #endregion
 
-        #region Выдать
+        #region Уменьшить
 
         private DelegateCommand _decreasePriorityCommand;
 
         public ICommand DecreasePriorityCommand => _decreasePriorityCommand ?? (_decreasePriorityCommand = new DelegateCommand(GiveItem, CanGiveItem));
+      //  public ICommand DecreasePriorityCommand = new DelegateCommand(GiveItem, CanGiveItem);
 
         private void GiveItem()
         {
@@ -77,5 +130,7 @@ namespace SampleMVVM.ViewModels
         #endregion
 
         #endregion
+
+        
     }
 }
