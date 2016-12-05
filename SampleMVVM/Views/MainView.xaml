@@ -62,7 +62,7 @@
                                 <TextBlock Text="Приоритет:" />
                                 <TextBlock Text="{Binding Priority, Mode=TwoWay}" FontWeight="Bold" Margin="10,0"/>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Width="20" Content="+" Command="{Binding IncreasePriorityCommand}" Margin="10,0" />
+                                    <Button Width="20" Content="+" Command="{Binding IncreasePriorityCommand}" Margin="10,0"/>
                                     <Button Width="20" Content="-" Command="{Binding DecreasePriorityCommand}" Margin="10,0" />
                                 </StackPanel>
                             </StackPanel>

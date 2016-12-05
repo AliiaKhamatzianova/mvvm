@@ -35,7 +35,7 @@ namespace SampleMVVM.Commands
         {
             Command.Execute(parameter);
         }
-
+        
         public event EventHandler CanExecuteChanged;
 
         private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

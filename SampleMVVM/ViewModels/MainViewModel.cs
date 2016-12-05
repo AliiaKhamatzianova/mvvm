@@ -23,35 +23,17 @@ namespace SampleMVVM.ViewModels
 
         public MainViewModel(IEnumerable<Task> tasks, DataBaseContext dbContext)
         {
-            var todoData = (from Task in dbContext.Tasks
-                           where Task.Status == Statuses.TODO
-                           select Task).ToList();
-            List<TaskViewModel> todoList = new List<TaskViewModel>();
-            foreach (var t in todoData)
-            {
-                todoList.Add(new TaskViewModel(t,dbContext));
-            }
-            TasksList = new ObservableCollection<TaskViewModel>(todoList);
+            var enumarable = tasks as IList<Task> ?? tasks.ToList();
 
-            var activeData = (from Task in dbContext.Tasks
-                            where Task.Status == Statuses.Active
-                            select Task).ToList();
-            List<TaskViewModel> activeList = new List<TaskViewModel>();
-            foreach (var t in activeData)
-            {
-                activeList.Add(new TaskViewModel(t, dbContext));
-            }
-            ActiveTasksList = new ObservableCollection<TaskViewModel>(activeList);
+            var todoData = enumarable.Where(t => t.Status == Statuses.TODO);
+            TasksList = new ObservableCollection<TaskViewModel>(todoData.Select(x=>new TaskViewModel(x, dbContext)));
 
-            var doneData = (from Task in dbContext.Tasks
-                              where Task.Status == Statuses.Done
-                              select Task).ToList();
-            List<TaskViewModel> doneList = new List<TaskViewModel>();
-            foreach (var t in doneData)
-            {
-                doneList.Add(new TaskViewModel(t, dbContext));
-            }
-            DoneTasksList = new ObservableCollection<TaskViewModel>(doneList);
+            var activeData = enumarable.Where(t => t.Status == Statuses.Active);
+            ActiveTasksList = new ObservableCollection<TaskViewModel>(activeData.Select(x => new TaskViewModel(x, dbContext)));
+
+            var doneData = enumarable.Where(t => t.Status == Statuses.Done);
+            DoneTasksList = new ObservableCollection<TaskViewModel>(doneData.Select(x => new TaskViewModel(x, dbContext)));
+
             //TasksList = new ObservableCollection<TaskViewModel>(tasks.Select(b => new TaskViewModel(b, dbContext));
             //ActiveTasksList = new ObservableCollection<TaskViewModel>(tasks.Select(b => new TaskViewModel(b, dbContext)));
 

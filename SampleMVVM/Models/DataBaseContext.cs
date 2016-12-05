@@ -8,7 +8,7 @@ using System.Runtime.Remoting.Contexts;
 
 namespace SampleMVVM.Models
 {
-    public class DataBaseInitializer : CreateDatabaseIfNotExists<DataBaseContext>
+    public class DataBaseInitializer : DropCreateDatabaseAlways<DataBaseContext>//DropCreateDatabaseAlways<DataBaseContext>//CreateDatabaseIfNotExists<DataBaseContext>
     {
         protected override void Seed(DataBaseContext context)
         {
@@ -19,8 +19,9 @@ namespace SampleMVVM.Models
                 new Task {Name = "И про это не забудь", Description = "Еще какое-то описание", Priority = Priorities.Low, Status = Statuses.TODO, StartDate = DateTime.Now}
             };
 
+            //context.Tasks.AddRange(tasks);
             tasks.ForEach(s => context.Tasks.Add(s));
-            context.SaveChanges();
+            //context.SaveChanges();
         }
     }
 
@@ -28,7 +29,7 @@ namespace SampleMVVM.Models
     {
         public DataBaseContext() : base("DataBaseContext")
         {
-            
+            Database.SetInitializer(new DataBaseInitializer());
         }
 
         public virtual DbSet<Task> Tasks { get; set; }

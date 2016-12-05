@@ -18,9 +18,9 @@ namespace SampleMVVM
 
             DataBaseContext ctx = new DataBaseContext();
             ctx.Tasks.Load();
-            var data = (from Tasks in ctx.Tasks
-                       //where Tasks.Status == Statuses.TODO
-                       select Tasks).ToList();
+            var data = ctx.Tasks.Local;//(from Tasks in ctx.Tasks
+                       ////where Tasks.Status == Statuses.TODO
+                       //select Tasks).ToList();
 
 
             //select t;
